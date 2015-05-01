@@ -1,0 +1,3 @@
+dynamicDDESSTggdh.C
+
+LIB = $(FOAM_LIBBIN)/lib_dynDDESGGDHgermanoNeg
