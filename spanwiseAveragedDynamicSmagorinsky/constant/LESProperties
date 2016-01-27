@@ -1,0 +1,44 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2.0.1                                 |
+|   \\  /    A nd           | Web:      www.OpenFOAM.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      LESProperties;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+LESModel        homogeneousDynSmagorinsky;
+
+delta		cubeRootVol;
+
+turbulence      on;
+
+printCoeffs     on;
+
+cubeRootVolCoeffs
+{
+    deltaCoeff      1;
+}
+
+homogeneousDynSmagorinskyCoeffs
+{
+    filter      simple;
+}
+
+// Seed patches to start averaging from
+patches (INFLOW OUTFLOW CYCLIC_FRONT CYCLIC_BACK);
+
+// Homogeneous direction in which to perform averaging
+component z; //spanwise
+// Non-homogeneous directions
+componentAlt1 x; //streamwise
+componentAlt2 y; //wall normal
+// ************************************************************************* //
