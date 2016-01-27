@@ -1,3 +1,0 @@
-dynDDESnewModify.C
-
-LIB = $(FOAM_LIBBIN)/lib_dynamicDDES_new1_incompressibleRASModels
