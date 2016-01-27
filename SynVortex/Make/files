@@ -1,0 +1,2 @@
+powerLawSEM.C
+LIB = $(FOAM_USER_LIBBIN)/synVortex
