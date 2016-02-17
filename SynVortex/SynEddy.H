@@ -47,6 +47,7 @@ sample of inflow boundary condition of U
         value                   uniform (1 0 0);
     }
 
+more modifications required to match description in paper
 
 
 \*---------------------------------------------------------------------------*/
