@@ -80,7 +80,10 @@ class powerLawSEMFvPatchVectorField
         scalar zMax_;
         scalar zMin_;
 
-        
+        scalar xPosi_[5000];
+        scalar yPosi_[5000];
+        scalar zPosi_[5000];
+        scalar intensity_[4][5000];
 
         scalar VB_;
 

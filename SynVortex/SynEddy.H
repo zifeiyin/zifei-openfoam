@@ -23,23 +23,36 @@ License
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 Class
-    powerLawSEMFvPatchVectorField
-
-Description
-    Boundary condition specifies a parabolic velocity inlet profile
-    (fixed value), given maximum velocity value (peak of the parabola),
-    flow direction n and direction of the parabolic coordinate y
+    SynEddyFvPatchVectorField
 
 SourceFiles
-    powerLawSEMFvPatchVectorField.C
+    SynEddyFvPatchVectorField.C
+
+Usage
+    Synthetic eddy for LES inflow. 
+    implemented according to Jarrin et al. International journal of heat
+    and fluid flow, 2006
 
 Author
-    Hrvoje Jasak, Wikki Ltd.  All rights reserved
+    Zifei Yin, Iowa State University,  All rights reserved
+    Email: zifeiyin@iastate.edu,  zifeiyin@gmail.com
+
+sample of inflow boundary condition of U
+    INFLOW
+    {
+        type                    SynEddy;
+        freeStreamU             (1 0 0);
+        refField                uniform (1 0 0);
+        BoundIntensity          0.05;
+        value                   uniform (1 0 0);
+    }
+
+
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef powerLawSEM_H
-#define powerLawSEM_H
+#ifndef SynEddy_H
+#define SynEddy_H
 
 #include "fvPatchFields.H"
 #include "fixedValueFvPatchFields.H"
@@ -50,42 +63,24 @@ namespace Foam
 {
 
 /*---------------------------------------------------------------------------*\
-              Class powerLawSEMFvPatchField Declaration
+              Class SynEddyFvPatchField Declaration
 \*---------------------------------------------------------------------------*/
 
-class powerLawSEMFvPatchVectorField
+class SynEddyFvPatchVectorField
 :
     public fixedValueFvPatchVectorField
 {
     // Private data
 
         //- Flow direction
-        vector n_;
+        vector freeStreamU_;
 
-        //- Direction of the y-coordinate
-        vector y_;
+        Field<vector>          refField_;
 
-        
-        scalar zref_;
-        scalar a;
-        scalar alpha_;
-        scalar N_;
+        Field<tensor>          Rstress_;
 
-        // SEM method
-
-        scalar xMax_;
-        scalar xMin_;
-        scalar yMax_;
-        scalar yMin_;
-        scalar zMax_;
-        scalar zMin_;
-
-        
-
-        scalar VB_;
 
         scalar BoundIntensity_;
-        scalar maxPerturbation_;
 
 
 
@@ -95,31 +90,31 @@ class powerLawSEMFvPatchVectorField
 public:
 
     //- Runtime type information
-    TypeName("powerLawSEM");
+    TypeName("SynEddy");
 
 
     // Constructors
 
         //- Construct from patch and internal field
-        powerLawSEMFvPatchVectorField
+        SynEddyFvPatchVectorField
         (
             const fvPatch&,
             const DimensionedField<vector, volMesh>&
         );
 
         //- Construct from patch, internal field and dictionary
-        powerLawSEMFvPatchVectorField
+        SynEddyFvPatchVectorField
         (
             const fvPatch&,
             const DimensionedField<vector, volMesh>&,
             const dictionary&
         );
 
-        //- Construct by mapping given powerLawSEMFvPatchVectorField
+        //- Construct by mapping given SynEddyFvPatchVectorField
         //  onto a new patch
-        powerLawSEMFvPatchVectorField
+        SynEddyFvPatchVectorField
         (
-            const powerLawSEMFvPatchVectorField&,
+            const SynEddyFvPatchVectorField&,
             const fvPatch&,
             const DimensionedField<vector, volMesh>&,
             const fvPatchFieldMapper&
@@ -130,14 +125,14 @@ public:
         {
             return tmp<fvPatchVectorField>
             (
-                new powerLawSEMFvPatchVectorField(*this)
+                new SynEddyFvPatchVectorField(*this)
             );
         }
 
         //- Construct as copy setting internal field reference
-        powerLawSEMFvPatchVectorField
+        SynEddyFvPatchVectorField
         (
-            const powerLawSEMFvPatchVectorField&,
+            const SynEddyFvPatchVectorField&,
             const DimensionedField<vector, volMesh>&
         );
 
@@ -149,26 +144,12 @@ public:
         {
             return tmp<fvPatchVectorField>
             (
-                new powerLawSEMFvPatchVectorField(*this, iF)
+                new SynEddyFvPatchVectorField(*this, iF)
             );
         }
 
 
     // Member functions
-
-        //- Return max value
-
-        //- Return flow direction
-        vector& n()
-        {
-            return n_;
-        }
-
-        //- Return y direction
-        vector& y()
-        {
-            return y_;
-        }
 
         //- Update coefficients
         virtual void updateCoeffs();

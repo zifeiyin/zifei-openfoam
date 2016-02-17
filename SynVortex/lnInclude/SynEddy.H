@@ -23,23 +23,36 @@ License
     Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
 
 Class
-    parabolicVelocityFvPatchVectorField
-
-Description
-    Boundary condition specifies a parabolic velocity inlet profile
-    (fixed value), given maximum velocity value (peak of the parabola),
-    flow direction n and direction of the parabolic coordinate y
+    SynEddyFvPatchVectorField
 
 SourceFiles
-    parabolicVelocityFvPatchVectorField.C
+    SynEddyFvPatchVectorField.C
+
+Usage
+    Synthetic eddy for LES inflow. 
+    implemented according to Jarrin et al. International journal of heat
+    and fluid flow, 2006
 
 Author
-    Hrvoje Jasak, Wikki Ltd.  All rights reserved
+    Zifei Yin, Iowa State University,  All rights reserved
+    Email: zifeiyin@iastate.edu,  zifeiyin@gmail.com
+
+sample of inflow boundary condition of U
+    INFLOW
+    {
+        type                    SynEddy;
+        freeStreamU             (1 0 0);
+        refField                uniform (1 0 0);
+        BoundIntensity          0.05;
+        value                   uniform (1 0 0);
+    }
+
+
 
 \*---------------------------------------------------------------------------*/
 
-#ifndef parabolicVelocityFvPatchVectorField_H
-#define parabolicVelocityFvPatchVectorField_H
+#ifndef SynEddy_H
+#define SynEddy_H
 
 #include "fvPatchFields.H"
 #include "fixedValueFvPatchFields.H"
@@ -50,53 +63,58 @@ namespace Foam
 {
 
 /*---------------------------------------------------------------------------*\
-              Class parabolicVelocityFvPatchField Declaration
+              Class SynEddyFvPatchField Declaration
 \*---------------------------------------------------------------------------*/
 
-class parabolicVelocityFvPatchVectorField
+class SynEddyFvPatchVectorField
 :
     public fixedValueFvPatchVectorField
 {
     // Private data
 
-        //- Peak velocity magnitude
-        scalar maxValue_;
-
         //- Flow direction
-        vector n_;
+        vector freeStreamU_;
 
-        //- Direction of the y-coordinate
-        vector y_;
+        Field<vector>          refField_;
+
+        Field<tensor>          Rstress_;
+
+
+        scalar BoundIntensity_;
+
+
+
+
 
 
 public:
 
     //- Runtime type information
-    TypeName("parabolicVelocity");
+    TypeName("SynEddy");
 
 
     // Constructors
 
         //- Construct from patch and internal field
-        parabolicVelocityFvPatchVectorField
+        SynEddyFvPatchVectorField
         (
             const fvPatch&,
             const DimensionedField<vector, volMesh>&
         );
 
         //- Construct from patch, internal field and dictionary
-        parabolicVelocityFvPatchVectorField
+        SynEddyFvPatchVectorField
         (
             const fvPatch&,
             const DimensionedField<vector, volMesh>&,
             const dictionary&
         );
 
-        //- Construct by mapping given parabolicVelocityFvPatchVectorField
+        //- Construct by mapping given SynEddyFvPatchVectorField
         //  onto a new patch
-        parabolicVelocityFvPatchVectorField
+        SynEddyFvPatchVectorField
         (
-            const parabolicVelocityFvPatchVectorField&,
+            const SynEddyFvPatchVectorField&,
             const fvPatch&,
             const DimensionedField<vector, volMesh>&,
             const fvPatchFieldMapper&
@@ -107,14 +125,14 @@ public:
         {
             return tmp<fvPatchVectorField>
             (
-                new parabolicVelocityFvPatchVectorField(*this)
+                new SynEddyFvPatchVectorField(*this)
             );
         }
 
         //- Construct as copy setting internal field reference
-        parabolicVelocityFvPatchVectorField
+        SynEddyFvPatchVectorField
         (
-            const parabolicVelocityFvPatchVectorField&,
+            const SynEddyFvPatchVectorField&,
             const DimensionedField<vector, volMesh>&
         );
 
@@ -126,30 +144,12 @@ public:
         {
             return tmp<fvPatchVectorField>
             (
-                new parabolicVelocityFvPatchVectorField(*this, iF)
+                new SynEddyFvPatchVectorField(*this, iF)
             );
         }
 
 
     // Member functions
-
-        //- Return max value
-        scalar& maxValue()
-        {
-            return maxValue_;
-        }
-
-        //- Return flow direction
-        vector& n()
-        {
-            return n_;
-        }
-
-        //- Return y direction
-        vector& y()
-        {
-            return y_;
-        }
 
         //- Update coefficients
         virtual void updateCoeffs();
